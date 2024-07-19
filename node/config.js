@@ -4,6 +4,7 @@ const path = require('path')
 require('dotenv').config()
 const env = process.env.NODE_ENV
 const Koa = require('koa')
+const bodyParser = require('koa-bodyparser')
 var Router = require('koa-router')
 const cors = require('koa2-cors')
 const sslify = require('koa-sslify').default
@@ -15,6 +16,7 @@ const options = {
 }
 
 const app = new Koa()
+app.use(bodyParser())
 app.use(sslify())
 app.use(cors())
 
