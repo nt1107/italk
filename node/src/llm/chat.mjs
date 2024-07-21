@@ -1,49 +1,76 @@
 import llm from './config.mjs'
-import { HumanMessage } from '@langchain/core/messages'
-import {
-  StringOutputParser,
-  StructuredOutputParser
-} from '@langchain/core/output_parsers'
+// import { HumanMessage } from '@langchain/core/messages'
+import { StructuredOutputParser } from '@langchain/core/output_parsers'
 import { ChatPromptTemplate, PromptTemplate } from '@langchain/core/prompts'
+import { InMemoryChatMessageHistory } from '@langchain/core/chat_history'
+import { RunnableWithMessageHistory } from '@langchain/core/runnables'
 import { z } from 'zod'
 
-const parser = new StringOutputParser()
+let messageHistories
+export const chat_chat = async (userInput, returnId) => {
+  if (returnId) {
+  } else {
+    messageHistories = {}
+  }
+  const prompt = ChatPromptTemplate.fromMessages([
+    [
+      'system',
+      `你是一个优秀的英文聊天助手，你叫小识，现在你将根据输入的信息，进行连续的英文对话`
+    ],
+    ['placeholder', '{chat_history}'],
+    ['human', '{input}']
+  ])
+  const chain = prompt.pipe(llm)
+  const withMessageHistory = new RunnableWithMessageHistory({
+    runnable: chain,
+    getMessageHistory: async (sessionId) => {
+      if (messageHistories[sessionId] === undefined) {
+        messageHistories[sessionId] = new InMemoryChatMessageHistory()
+      }
+      return messageHistories[sessionId]
+    },
+    inputMessagesKey: 'input',
+    historyMessagesKey: 'chat_history'
+  })
+  const config = {
+    configurable: {
+      sessionId: 'a1'
+    }
+  }
 
-export const chat_chat = (userInput, returnId) => {
-  console.log(userInput)
-  return 123
+  const res = await withMessageHistory.invoke(
+    {
+      input: userInput
+    },
+    config
+  )
+  return new Promise((resolve, reject) => {
+    resolve(res.content)
+  })
 }
 
 export const chat_translate = async (userInput, returnId) => {
-  const personSchema = z.object({
-    english: z.string().describe('识别出来的英文单词或者短语或者句子'),
-    explain: z
-      .string()
-      .describe('识别出来的英文单词或者短语或者句子对应的中文解释')
-  })
+  const personSchema = z
+    .object({
+      english: z.string().describe('识别出来的英文单词或者短语或者句子'),
+      explain: z.string().describe('翻译成中文')
+    })
+    .describe('对提供的中文寻找发音相似的英文')
 
   const parser = StructuredOutputParser.fromZodSchema(personSchema)
 
-  const systemTemplate = `你是一个中英文都精通的大师，你的任务是纠正汉语式的英文发音，
-  现在需要你来识别中文汉字或者英文和中文汉字组成的词语或者句子，
-  这个词语或者句子的发音往往都对应着一个英文单词或者句子的发音，比如
-  古的 实际上应该为good, "哈我 而由" 实际上对应 “How are you”。 
-  返回的数据格式应该是为：{{ english: string, explain: string }}, 
-  其中english字段对应英文的单词或句子，explain对应用中文对这个单词或者句子的解释或者翻译。 
-  如果发送了多段，请组成一句话，并且只返回一个对象,
-  比如"哈我 are you, 二门 fine, 俺就?",应该返回：{{ english: 'How are you, I'm fine, and you?', explain: '你还好吗，我很好，你呢？'}},
-  当你返回数据的时候，一定记得校验数据的格式：Object<{{english: string, explain: string}}>,如果格式不对，请修改后再返回
-  识别接下来的词{content}`
-  const promptTemplate = PromptTemplate.fromTemplate(systemTemplate)
+  const prompt = PromptTemplate.fromTemplate(
+    `识别并翻译输入的英文{content},Wrap the output in json tags\n{format_instructions}`
+  )
 
-  const partialedPrompt = await promptTemplate.partial({
+  const partialedPrompt = await prompt.partial({
     format_instructions: parser.getFormatInstructions()
   })
-  const chain = partialedPrompt.pipe(llm).pipe(parser)
-  // const chain = promptTemplate.pipe(llm).pipe(parser)
-  const res = chain.invoke({ content: userInput })
 
+  const chain = partialedPrompt.pipe(llm).pipe(parser)
+
+  const res = await chain.invoke({ content: userInput })
   return new Promise((resolve, reject) => {
-    resolve(res)
-  }).then((res) => parser.invoke(res))
+    resolve(res.content)
+  })
 }
