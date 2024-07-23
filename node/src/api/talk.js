@@ -1,14 +1,20 @@
 const { router } = require('../../config.js')
 let chatFunction
 ;(async () => {
-  const module = await import('../llm/chat.mjs')
-  chatFunction = module
+  try {
+    const module = await import('../llm/chat.mjs')
+    chatFunction = module
+    console.log(111, chatFunction)
+  } catch (err) {
+    console.log('err', err)
+  }
 })()
 
 module.exports = () => {
   router.post('/chat_chat', async (ctx) => {
     const input = ctx.request.body.input
     const returnId = ctx.request.body.id
+    console.log(222)
     const res = await chatFunction.chat_chat(input, returnId)
     const id = 1
     ctx.body = {
