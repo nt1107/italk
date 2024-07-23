@@ -9,10 +9,18 @@ var Router = require('koa-router')
 const cors = require('koa2-cors')
 const sslify = require('koa-sslify').default
 const https = require('https')
-
-const options = {
-  key: fs.readFileSync(path.join(__dirname, 'key.pem')),
-  cert: fs.readFileSync(path.join(__dirname, 'cert.pem'))
+let options
+if (env === 'development') {
+  options = {
+    key: fs.readFileSync(path.join(__dirname, 'key.pem')),
+    cert: fs.readFileSync(path.join(__dirname, 'cert.pem'))
+  }
+} else {
+  const homeDir = process.env.HOME || process.env.USERPROFILE
+  options = {
+    key: fs.readFileSync(path.join(homeDir, 'ssl/www.xtr327.com.key')),
+    cert: fs.readFileSync(path.join(homeDir, 'ssl/www.xtr327.com.pem'))
+  }
 }
 
 const app = new Koa()
