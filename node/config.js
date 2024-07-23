@@ -20,11 +20,11 @@ app.use(bodyParser())
 app.use(sslify())
 app.use(cors())
 
-https.createServer(options, app.callback()).listen(3000, (err) => {
+https.createServer(options, app.callback()).listen(3033, (err) => {
   if (err) {
     console.log('服务启动出错', err)
   } else {
-    console.log('运行在' + 3000 + '端口')
+    console.log('运行在' + 3033 + '端口')
   }
 })
 
