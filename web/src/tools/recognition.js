@@ -2,6 +2,7 @@ export class Recognition {
   constructor(getResult) {
     if ('webkitSpeechRecognition' in window) {
       this.recognition = new webkitSpeechRecognition()
+      this.recognition.lang = 'en-US'
       this.setDefault()
       this.setResult(getResult)
     } else {

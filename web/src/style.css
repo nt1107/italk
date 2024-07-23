@@ -7,3 +7,11 @@ body,
 body{
   margin: 0px;
 }
+
+:root {
+ --theme-color:  #BE77F9;
+ --background-color: black;
+ --complementary-color: #00D0DE;
+ --gray-color:  #6D7075;
+ --text-color: #ffffff;
+}

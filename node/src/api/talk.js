@@ -12,7 +12,7 @@ module.exports = () => {
     const res = await chatFunction.chat_chat(input, returnId)
     const id = 1
     ctx.body = {
-      message: '上传成功',
+      message: '',
       code: 200,
       data: {
         content: res,
@@ -26,7 +26,7 @@ module.exports = () => {
     const res = await chatFunction.chat_translate(input, returnId)
     const id = 1
     ctx.body = {
-      message: '上传成功',
+      message: '',
       code: 200,
       data: {
         content: res,

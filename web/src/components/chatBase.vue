@@ -265,14 +265,15 @@ watch(
       justify-content: center;
     }
     .speechInput_content {
-      background-color: rgb(144, 124, 255);
+      // background-color: rgb(144, 124, 255);
+      background-color: var(--theme-color);
       height: 40px;
       .speechInput_button {
         position: fixed;
         left: 50%;
         bottom: 0px;
         transform: translate(-50%, -50%);
-        background-color: rgb(144, 124, 255);
+        background-color: var(--theme-color);
         width: 60px;
         height: 60px;
         border-radius: 60px;
