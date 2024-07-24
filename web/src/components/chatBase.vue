@@ -19,21 +19,17 @@
             class="dialog_text"
             :class="[item.author_type === 0 ? '' : 'blueBackground']"
           >
-            <pre>{{ item.content }}</pre>
+            <pre v-if="item.author_type === 1">{{ item.content }}</pre>
+            <div v-else>
+              <slot :content="item.content">
+                <pre>{{ item.content }}</pre>
+              </slot>
+            </div>
             <div class="loading_content flex_box" v-show="item.loading">
               <div class="ldball1"></div>
               <div class="ldball2"></div>
               <div class="ldball3"></div>
               <div class="ldball4"></div>
-            </div>
-          </div>
-          <div class="operate_content flex_box">
-            <div
-              class="stop_box flex_box cursor"
-              v-show="item.loading"
-              @click="stop"
-            >
-              停止生成 <PoweroffCircleFill style="width: 15px; height: 15px" />
             </div>
           </div>
         </div>
@@ -114,22 +110,7 @@ watch([isSpeek, recognitionStatus], () => {
   }
 })
 
-const stop = () => {
-  // emitter.emit('stop')
-}
-
 const touchElement = ref()
-// onMounted(() => {
-//   touchElement.value.addEventListener('touchcancel', onTouchCancel)
-// })
-// onBeforeUnmount(() => {
-//   touchElement.value.removeEventListener('touchcancel', onTouchCancel)
-// })
-// const onTouchCancel = (event) => {
-//   if (isSpeek.value) {
-//     onTouchEnd()
-//   }
-// }
 
 watch(
   () => prop.contentList,
@@ -148,7 +129,12 @@ watch(
 .dialog_content {
   height: 100%;
   box-sizing: border-box;
+  padding-bottom: 100px;
   overflow-y: auto;
+  .flex_box {
+    display: flex;
+    align-items: center;
+  }
   &::-webkit-scrollbar {
     width: 0;
     height: 0;
