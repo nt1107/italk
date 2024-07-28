@@ -12,6 +12,7 @@
   "license": "ISC",
   "dependencies": {
     "@langchain/community": "^0.2.19",
+    "baidu-aip-sdk": "^4.16.16",
     "dotenv": "^16.4.5",
     "jsonwebtoken": "^9.0.2",
     "koa": "^2.15.3",
