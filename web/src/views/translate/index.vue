@@ -1,7 +1,7 @@
 <template>
   <chatBase
     :contentList="chatList"
-    @getText="getVoiceToText"
+    @getRecord="getVoiceToText"
     v-slot="slotProps"
   >
     <div>
@@ -22,9 +22,9 @@
 
 <script setup>
 import { ref } from 'vue'
-import chatBase from '@/components/chatBase.vue'
-import { chat_translate } from '@/api/chat.js'
-import { useChat } from '@/useTool/useChat.js'
+import chatBase from '@/components/chatBaseTts.vue'
+import { chat_translate, tts } from '@/api/chat.js'
+import { useTts } from '@/useTool/useChat.js'
 
 const chatList = ref([
   {
@@ -35,7 +35,7 @@ const chatList = ref([
   }
 ])
 
-const { getVoiceToText } = useChat(chatList, chat_translate)
+const { getVoiceToText } = useTts(chatList, tts, chat_translate)
 </script>
 
 <style lang="scss" scoped>

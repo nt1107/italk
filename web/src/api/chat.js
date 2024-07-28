@@ -8,3 +8,9 @@ export const chat_chat = (data) => {
 export const chat_translate = (data) => {
   return request.post('chat_translate', data)
 }
+
+export const tts = (data) => {
+  return request.post('tts', data, {
+    headers: { 'Content-Type': 'multipart/form-data' }
+  })
+}
