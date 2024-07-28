@@ -1,4 +1,10 @@
 const { router } = require('../../config.js')
+const koaMulter = require('koa-multer')
+
+const upload = koaMulter({
+  dest: 'uploads/'
+})
+
 let chatFunction
 ;(async () => {
   try {
@@ -37,5 +43,10 @@ module.exports = () => {
         id
       }
     }
+  })
+
+  router.post('/tts', upload.single('audio'), async (ctx) => {
+    const file = ctx.req.file
+    console.log('Received PCM file:', file)
   })
 }
