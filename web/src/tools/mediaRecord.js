@@ -52,9 +52,10 @@ export const useMediaRecord = () => {
 
   const getFormData = () => {
     return new Promise(async (reslove) => {
-      const pcmBlob = await convertToPCM(blob.value)
+      // const pcmBlob = await convertToPCM(blob.value)
+      const pcmBlob = blob.value
       const formData = new FormData()
-      formData.append('audio', pcmBlob, 'recording.pcm')
+      formData.append('audio', pcmBlob, 'recording.webm')
       reslove(formData)
     })
   }
