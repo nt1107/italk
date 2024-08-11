@@ -31,6 +31,16 @@
               <div class="ldball3"></div>
               <div class="ldball4"></div>
             </div>
+            <div
+              class="voice_player_box"
+              v-show="!item.loading"
+              :class="[
+                item.author_type === 1 ? 'positionLeft' : 'positionRight'
+              ]"
+              @click="playerClick(item)"
+            >
+              <Voice color="white" width="15px" height="15px" />
+            </div>
           </div>
         </div>
       </div>
@@ -57,9 +67,11 @@
 
 <script setup>
 import { ref, watch, nextTick, onMounted, onBeforeUnmount } from 'vue'
-import { Microphone } from '@nutui/icons-vue'
+import { Microphone, Voice } from '@nutui/icons-vue'
 import dynamicVoice from './dynamicVoice.vue'
 import { useMediaRecord } from '@/tools/mediaRecord.js'
+import { tta } from '@/api/chat.js'
+import axios from 'axios'
 
 const prop = defineProps({
   contentList: Array
@@ -68,6 +80,30 @@ const emit = defineEmits(['getRecord'])
 
 const { recordStart, stopRecording, getFormData, recordFinish } =
   useMediaRecord()
+
+const playerClick = async (item) => {
+  let url
+  if (item.blob) {
+    url = URL.createObjectURL(item.blob)
+  } else {
+    const res = await fetch('https://localhost:3033/api/tta', {
+      method: 'post',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        input: item.content
+      })
+    })
+    const blob = await res.blob()
+    url = URL.createObjectURL(blob)
+  }
+
+  // 开始播放
+  const audio = new Audio(url)
+  audio.volume = 1
+  audio.play()
+}
 
 const content = ref()
 const isSpeek = ref(false)
@@ -134,7 +170,7 @@ watch(
     background-color: transparent;
   }
   .dialog_line {
-    margin-top: 10px;
+    margin-top: 20px;
     padding-left: 20px;
     padding-right: 20px;
     .dialog_item {
@@ -155,6 +191,7 @@ watch(
         .dialog_text {
           background: rgb(242, 242, 242);
           box-shadow: 0 0 10px 1px rgba(0, 0, 0, 0.2);
+          position: relative;
           color: #24292f;
           font-weight: bold;
           padding: 10px;
@@ -203,6 +240,24 @@ watch(
               background-color: rgb(147, 129, 189);
               animation: scale 0.4s ease-in-out 0.4s infinite alternate;
             }
+          }
+          .voice_player_box {
+            height: 20px;
+            width: 20px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--theme-color);
+            position: absolute;
+            bottom: 0px;
+            transform: translateY(50%);
+          }
+          .positionLeft {
+            left: 10px;
+          }
+          .positionRight {
+            right: 10px;
           }
         }
         .operate_content {

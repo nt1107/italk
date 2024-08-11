@@ -1,22 +1,5 @@
 import { ref } from 'vue'
 
-const convertToPCM = async (webmBlob) => {
-  const audioContext = new AudioContext()
-  const audioBuffer = await audioContext.decodeAudioData(
-    await webmBlob.arrayBuffer()
-  )
-
-  const sampleRate = audioBuffer.sampleRate
-  const channelData = audioBuffer.getChannelData(0)
-  const pcmArray = new Int16Array(channelData.length)
-
-  channelData.forEach((sample, index) => {
-    pcmArray[index] = Math.max(-32768, Math.min(32767, sample * 32767)) // 转换为 PCM
-  })
-
-  return new Blob([pcmArray.buffer], { type: 'audio/x-wav' })
-}
-
 export const useMediaRecord = () => {
   const mediaRecorder = ref(null)
   const chunks = ref([])
@@ -35,6 +18,19 @@ export const useMediaRecord = () => {
           blob.value = new Blob(chunks.value, { type: 'audio/webm' })
           chunks.value = []
           recordFinish.value = true
+
+          const url = URL.createObjectURL(blob.value)
+
+          // 创建一个隐藏的可下载链接并触发点击
+          const link = document.createElement('a')
+          link.href = url
+          link.setAttribute('download', 'recording.webm') // 设置文件名
+          document.body.appendChild(link)
+          link.click()
+          document.body.removeChild(link)
+
+          // 清理 URL 对象
+          URL.revokeObjectURL(url)
         })
 
         mediaRecorder.value.addEventListener('dataavailable', (e) => {
@@ -52,11 +48,10 @@ export const useMediaRecord = () => {
 
   const getFormData = () => {
     return new Promise(async (reslove) => {
-      // const pcmBlob = await convertToPCM(blob.value)
-      const pcmBlob = blob.value
       const formData = new FormData()
-      formData.append('audio', pcmBlob, 'recording.webm')
-      reslove(formData)
+      formData.append('audio', blob.value, 'recording.webm')
+      const res = [formData, blob.value]
+      reslove(res)
     })
   }
 

@@ -2,7 +2,7 @@ import { ref } from 'vue'
 
 const setLastItem = (list, item) => {
   if (Array.isArray(list.value)) {
-    list.value[list.value.length - 1] = item
+    Object.assign(list.value[list.value.length - 1], item)
   }
 }
 
@@ -50,12 +50,13 @@ export const useTts = (chatList, ttsApi, chatApi) => {
     })
     returnId = res.data.id
   }
-  const getVoiceToText = async (formData) => {
+  const getVoiceToText = async ([formData, blob]) => {
     if (!formData) return
     chatList.value.push({
       author_type: 1,
       content: '',
-      loading: true
+      loading: true,
+      blob: blob
     })
     const res = await ttsApi(formData)
     setLastItem(chatList, {

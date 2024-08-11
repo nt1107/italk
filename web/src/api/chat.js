@@ -14,3 +14,9 @@ export const tts = (data) => {
     headers: { 'Content-Type': 'multipart/form-data' }
   })
 }
+
+export const tta = (data) => {
+  return request.post('tta', data, {
+    headers: { responseType: 'arraybuffer' }
+  })
+}

@@ -1,8 +1,11 @@
 const { router } = require('../../config.js')
 const koaMulter = require('koa-multer')
 const { ttsClient } = require('../tts/index.js')
+const ffmpegPath = require('@ffmpeg-installer/ffmpeg').path
 const ffmpeg = require('fluent-ffmpeg')
 const path = require('path')
+const { Readable } = require('stream')
+ffmpeg.setFfmpegPath(ffmpegPath)
 
 let fs = require('fs')
 
@@ -74,16 +77,6 @@ module.exports = () => {
           const res = await ttsClient.recognize(voiceBase64, 'wav', 16000, {
             dev_pid: 1737
           })
-          // .then(
-          //   (result) => {
-          //     console.log(
-          //       '语音识别本地音频文件结果: ' + JSON.stringify(result)
-          //     )
-          //   },
-          //   (err) => {
-          //     console.log('err', err)
-          //   }
-          // )
           ctx.body = {
             message: '',
             code: 200,
@@ -100,5 +93,18 @@ module.exports = () => {
         })
         .run()
     })
+  })
+  router.post('/tta', async (ctx) => {
+    const input = ctx.request.body.input
+    const returnId = ctx.request.body.id
+    const res = await ttsClient.text2audio(input, {
+      spd: 5,
+      pit: 5,
+      vol: 10,
+      per: 5
+    })
+    ctx.set('Content-Type', 'audio/mpeg')
+    ctx.set('Content-Disposition', 'attachment; filename=tts.mpVoice.mp3')
+    ctx.body = res.data
   })
 }
