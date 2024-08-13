@@ -2,7 +2,7 @@ const { router } = require('../../config.js')
 const koaMulter = require('koa-multer')
 const { ttsClient } = require('../tts/index.js')
 const ffmpegPath = require('@ffmpeg-installer/ffmpeg').path
-const ffmpeg = require('fluent-ffmpeg')
+// const ffmpeg = require('fluent-ffmpeg')
 const path = require('path')
 const { Readable } = require('stream')
 console.log(11, ffmpegPath)
