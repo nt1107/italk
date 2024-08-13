@@ -18,19 +18,6 @@ export const useMediaRecord = () => {
           blob.value = new Blob(chunks.value, { type: 'audio/webm' })
           chunks.value = []
           recordFinish.value = true
-
-          const url = URL.createObjectURL(blob.value)
-
-          // 创建一个隐藏的可下载链接并触发点击
-          const link = document.createElement('a')
-          link.href = url
-          link.setAttribute('download', 'recording.webm') // 设置文件名
-          document.body.appendChild(link)
-          link.click()
-          document.body.removeChild(link)
-
-          // 清理 URL 对象
-          URL.revokeObjectURL(url)
         })
 
         mediaRecorder.value.addEventListener('dataavailable', (e) => {

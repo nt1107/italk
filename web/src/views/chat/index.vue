@@ -1,5 +1,5 @@
 <template>
-  <chatBase :contentList="chatList" @getRecord="getVoiceToText" />
+  <chatBase :contentList="chatList" @getRecord="getVoiceToText" type="chat" />
 </template>
 
 <script setup>

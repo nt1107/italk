@@ -74,7 +74,8 @@ import { tta } from '@/api/chat.js'
 import axios from 'axios'
 
 const prop = defineProps({
-  contentList: Array
+  contentList: Array,
+  type: String
 })
 const emit = defineEmits(['getRecord'])
 
@@ -92,7 +93,7 @@ const playerClick = async (item) => {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        input: item.content
+        input: prop.type === 'chat' ? item.content : item.content.english
       })
     })
     const blob = await res.blob()

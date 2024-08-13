@@ -1,0 +1,17 @@
+.nut-radio-group {
+  display: inline-block;
+  .nut-radio {
+    margin-bottom: 5px;
+  }
+  &--horizontal {
+    .nut-radio {
+      display: inline-flex;
+      margin-right: 10px;
+      &--round {
+        .nut-radio__label {
+          margin: 0 6px;
+        }
+      }
+    }
+  }
+}

@@ -3,6 +3,7 @@
     :contentList="chatList"
     @getRecord="getVoiceToText"
     v-slot="slotProps"
+    type="translate"
   >
     <div>
       <pre>{{ slotProps.content.english }}</pre>
