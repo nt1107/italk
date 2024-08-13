@@ -6,6 +6,7 @@ const ffmpeg = require('fluent-ffmpeg')
 const path = require('path')
 const { Readable } = require('stream')
 ffmpeg.setFfmpegPath(ffmpegPath)
+console.log(11, ffmpegPath)
 
 let fs = require('fs')
 
