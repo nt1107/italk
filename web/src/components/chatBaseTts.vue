@@ -87,7 +87,7 @@ const playerClick = async (item) => {
   if (item.blob) {
     url = URL.createObjectURL(item.blob)
   } else {
-    const res = await fetch('https://localhost:3033/api/tta', {
+    const res = await fetch(import.meta.env.VITE_API_ADRESS + 'tta', {
       method: 'post',
       headers: {
         'Content-Type': 'application/json'
