@@ -101,6 +101,7 @@ module.exports = () => {
   router.post('/tta', async (ctx) => {
     const input = ctx.request.body.input
     const returnId = ctx.request.body.id
+    console.log(1, input)
     const res = await ttsClient.text2audio(input, {
       spd: 5,
       pit: 5,
