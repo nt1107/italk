@@ -5,8 +5,8 @@ const ffmpegPath = require('@ffmpeg-installer/ffmpeg').path
 const ffmpeg = require('fluent-ffmpeg')
 const path = require('path')
 const { Readable } = require('stream')
-ffmpeg.setFfmpegPath(ffmpegPath)
 console.log(11, ffmpegPath)
+ffmpeg.setFfmpegPath(ffmpegPath)
 
 let fs = require('fs')
 
