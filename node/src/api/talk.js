@@ -80,19 +80,23 @@ module.exports = () => {
           let voice = fs.readFileSync(wavFilePath)
           let voiceBase64 = Buffer.from(voice)
           console.log(222)
-          const res = await ttsClient.recognize(voiceBase64, 'wav', 16000, {
-            dev_pid: 1737
-          })
-          console.log(222, res)
-          ctx.body = {
-            message: '',
-            code: 200,
-            data: {
-              content: Array.isArray(res.result) ? res.result[0] : res.result
-              // id
+          try {
+            const res = await ttsClient.recognize(voiceBase64, 'wav', 16000, {
+              dev_pid: 1737
+            })
+            console.log(333, res)
+            ctx.body = {
+              message: '',
+              code: 200,
+              data: {
+                content: Array.isArray(res.result) ? res.result[0] : res.result
+                // id
+              }
             }
+            resolve()
+          } catch (err) {
+            console.log('err-', err)
           }
-          resolve()
         })
         .on('error', (err) => {
           console.error('Error during conversion:', err)
