@@ -68,6 +68,7 @@ module.exports = () => {
     const file = ctx.req.file
     const webmFilePath = path.join('uploads', file.filename)
     const wavFilePath = path.join(`${webmFilePath.replace('.webm', '')}.wav`)
+    console.log(111)
     await new Promise((resolve, reject) => {
       ffmpeg(webmFilePath)
         .output(wavFilePath)
@@ -78,9 +79,11 @@ module.exports = () => {
         .on('end', async () => {
           let voice = fs.readFileSync(wavFilePath)
           let voiceBase64 = Buffer.from(voice)
+          console.log(222)
           const res = await ttsClient.recognize(voiceBase64, 'wav', 16000, {
             dev_pid: 1737
           })
+          console.log(222, res)
           ctx.body = {
             message: '',
             code: 200,
@@ -101,14 +104,12 @@ module.exports = () => {
   router.post('/tta', async (ctx) => {
     const input = ctx.request.body.input
     const returnId = ctx.request.body.id
-    console.log(1, input)
     const res = await ttsClient.text2audio(input, {
       spd: 5,
       pit: 5,
       vol: 10,
       per: 4
     })
-    console.log(11, res)
     ctx.set('Content-Type', 'audio/mpeg')
     ctx.set('Content-Disposition', 'attachment; filename=tts.mpVoice.mp3')
     ctx.body = res.data
