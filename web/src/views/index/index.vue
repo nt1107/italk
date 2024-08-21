@@ -44,7 +44,7 @@
 
 <script setup>
 import { ref, h } from 'vue'
-import { Refresh, Comment, CheckNormal } from '@nutui/icons-vue'
+import { Refresh, Comment, CheckNormal, Setting } from '@nutui/icons-vue'
 import { useRouter } from 'vue-router'
 
 const router = useRouter()
@@ -66,8 +66,8 @@ const List = [
     route: 'translate'
   },
   {
-    title: '场景单词',
-    icon: h(CheckNormal),
+    title: '设置',
+    icon: h(Setting),
     name: 'find',
     route: 'word'
   }
