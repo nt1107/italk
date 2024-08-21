@@ -115,6 +115,7 @@ module.exports = () => {
         vol: 10,
         per: 4
       })
+      console.log(12, res)
       ctx.set('Content-Type', 'audio/mpeg')
       ctx.set('Content-Disposition', 'attachment; filename=tts.mpVoice.mp3')
       ctx.body = res.data
