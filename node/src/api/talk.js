@@ -109,13 +109,13 @@ module.exports = () => {
     const input = ctx.request.body.input
     const returnId = ctx.request.body.id
     try {
+      console.log(12, input)
       const res = await ttsClient.text2audio(input, {
         spd: 5,
         pit: 5,
         vol: 10,
         per: 4
       })
-      console.log(12, res)
       ctx.set('Content-Type', 'audio/mpeg')
       ctx.set('Content-Disposition', 'attachment; filename=tts.mpVoice.mp3')
       ctx.body = res.data
