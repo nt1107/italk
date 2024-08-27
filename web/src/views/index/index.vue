@@ -19,7 +19,11 @@
     </div>
     <div class="head_content"></div>
     <div class="body_content">
-      <router-view />
+      <router-view v-slot="{ Component }">
+        <keep-alive>
+          <component :is="Component" />
+        </keep-alive>
+      </router-view>
     </div>
     <nut-popup
       v-model:visible="noticeShow"
@@ -48,7 +52,11 @@ import { Refresh, Comment, CheckNormal, Setting } from '@nutui/icons-vue'
 import { useRouter } from 'vue-router'
 
 const router = useRouter()
-const active = ref('category')
+const active = ref(
+  localStorage.getItem('talk_router')
+    ? localStorage.getItem('talk_router')
+    : 'chat'
+)
 
 const noticeShow = ref(true)
 
@@ -56,20 +64,20 @@ const List = [
   {
     title: '对话',
     icon: h(Comment),
-    name: 'category',
+    name: 'chat',
     route: 'chat'
   },
   {
     title: '翻译',
     icon: h(Refresh),
-    name: 'home',
+    name: 'translate',
     route: 'translate'
   },
   {
     title: '设置',
     icon: h(Setting),
-    name: 'find',
-    route: 'word'
+    name: 'config',
+    route: 'config'
   }
 ]
 

@@ -22,13 +22,18 @@ const router = createRouter({
           component: () => import('@/views/translate/index.vue')
         },
         {
-          path: '/word',
-          name: 'word',
-          component: () => import('@/views/word/index.vue')
+          path: '/config',
+          name: 'config',
+          component: () => import('@/views/config/index.vue')
         }
       ]
     }
   ]
+})
+
+router.beforeEach((to, from, next) => {
+  localStorage.setItem('talk_router', to.name)
+  next()
 })
 
 export default router

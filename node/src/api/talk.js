@@ -105,13 +105,9 @@ module.exports = () => {
   router.post('/tta', async (ctx) => {
     const input = ctx.request.body.input
     const returnId = ctx.request.body.id
+    const config = ctx.request.body.config
     try {
-      const res = await ttsClient.text2audio(input, {
-        spd: 5,
-        pit: 5,
-        vol: 10,
-        per: 4
-      })
+      const res = await ttsClient.text2audio(input, config)
       ctx.set('Content-Type', 'audio/mpeg')
       ctx.set('Content-Disposition', 'attachment; filename=tts.mpVoice.mp3')
       ctx.body = res.data

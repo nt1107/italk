@@ -93,7 +93,8 @@ const playerClick = async (item) => {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        input: prop.type === 'chat' ? item.content : item.content.english
+        input: prop.type === 'chat' ? item.content : item.content.english,
+        config: JSON.parse(localStorage.getItem('tta_config'))
       })
     })
     const blob = await res.blob()
