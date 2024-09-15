@@ -63,10 +63,11 @@ module.exports = () => {
       }
     }
   })
-
+  // voice to text
   router.post('/tts', upload.single('audio'), async (ctx) => {
     const file = ctx.req.file
     const webmFilePath = path.join('uploads', file.filename)
+    console.log(111, filename)
     const wavFilePath = path.join(`${webmFilePath.replace('.webm', '')}.wav`)
     await new Promise((resolve, reject) => {
       ffmpeg(webmFilePath)
@@ -102,6 +103,7 @@ module.exports = () => {
         .run()
     })
   })
+  // text to voice
   router.post('/tta', async (ctx) => {
     const input = ctx.request.body.input
     const returnId = ctx.request.body.id
