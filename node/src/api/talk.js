@@ -67,8 +67,9 @@ module.exports = () => {
   router.post('/tts', upload.single('audio'), async (ctx) => {
     const file = ctx.req.file
     const webmFilePath = path.join('uploads', file.filename)
-    console.log(111, filename)
-    const wavFilePath = path.join(`${webmFilePath.replace('.webm', '')}.wav`)
+    const ext = ctx.req.ext ? ctx.req.ext : 'wav'
+    console.log(111, ext)
+    const wavFilePath = path.join(`${webmFilePath.replace('.' + ext, '')}.wav`)
     await new Promise((resolve, reject) => {
       ffmpeg(webmFilePath)
         .output(wavFilePath)
