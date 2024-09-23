@@ -119,7 +119,7 @@ module.exports = () => {
     }
   })
   router.get('/getGreeting', async (ctx) => {
-    console.log('test:', ctx.request.query)
+    console.log('test:', ctx.request.query.type)
     const type = ctx.request.query.type
     let returnStr = ''
     switch (type) {
