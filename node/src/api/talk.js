@@ -118,4 +118,21 @@ module.exports = () => {
       console.log('err', err)
     }
   })
+  router.get('/getGreeting', async (ctx) => {
+    const type = ctx.request.query.type
+    let returnStr = ''
+    switch (type) {
+      case 'chat':
+        // returnStr = 'I am your conversational partner，Xiao Shi'
+        returnStr = 'translate by chat'
+        break
+      case 'translate':
+        // returnStr = 'I am your translation assistant'
+        returnStr = 'tool of translate'
+        break
+      default:
+        returnStr = ''
+    }
+    ctx.body = returnStr
+  })
 }
