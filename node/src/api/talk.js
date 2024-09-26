@@ -70,6 +70,7 @@ module.exports = () => {
     const ext = ctx.req.body.ext ? ctx.req.body.ext : 'webm'
     console.log(111, ext, new Date().toLocaleString())
     const wavFilePath = path.join(`${webmFilePath.replace('.' + ext, '')}.wav`)
+    console.log(112, wavFilePath)
     await new Promise((resolve, reject) => {
       ffmpeg(webmFilePath)
         .output(wavFilePath)
@@ -80,10 +81,13 @@ module.exports = () => {
         .on('end', async () => {
           let voice = fs.readFileSync(wavFilePath)
           let voiceBase64 = Buffer.from(voice)
+          console.log(113)
+
           try {
             const res = await ttsClient.recognize(voiceBase64, 'wav', 16000, {
               dev_pid: 1737
             })
+            console.log(114, res)
             ctx.body = {
               message: '',
               code: 200,
