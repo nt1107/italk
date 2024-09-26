@@ -68,7 +68,7 @@ module.exports = () => {
     const file = ctx.req.file
     const webmFilePath = path.join('uploads', file.filename)
     const ext = ctx.req.body.ext ? ctx.req.body.ext : 'webm'
-    console.log(111, ext, new Date())
+    console.log(111, ext, new Date().toLocaleString())
     const wavFilePath = path.join(`${webmFilePath.replace('.' + ext, '')}.wav`)
     await new Promise((resolve, reject) => {
       ffmpeg(webmFilePath)
